@@ -17,15 +17,17 @@ foreach my $files(@files){
 	
 	($name,$path,$suffix) = fileparse($files,@suffixlist);
 	
-	$mail_file = open MAIL,">$dest/$name.$suffix";
+	open MAIL,">$dest/$name.$suffix";
 	
 	while(<USERINFO>){
-		@line = <USERINFO> =~ m/.*?\s*(\w+\@\w+\.\w+)\s*.*?/gi;
-		print @line[0]."\r\n";
-
+		~ m/.*?(\w+\@\w+\.\w+).*?/i;
+		if($1){
+			syswrite(MAIL,"$1\r\n");
+			print "$1\r\n";
+		}
 	}
-	close USERINFO;
-	close MAIL;
-	
+
 }
+close USERINFO;
+close MAIL;
 
