@@ -20,10 +20,11 @@ foreach my $files(@files){
 	open MAIL,">$dest/$name.$suffix";
 	
 	while(<USERINFO>){
-		~ m/.*?(\w+\@\w+\.\w+).*?/i;
-		if($1){
-			syswrite(MAIL,"$1\r\n");
-			print "$1\r\n";
+		@email = $_=~ m/.*?(\w+\@\w+\.\w+).*?/i;
+		if(@email){
+			syswrite(MAIL,"@email[0]\r\n");
+			print "@email[0]\r\n";
+			undef @email;
 		}
 	}
 
