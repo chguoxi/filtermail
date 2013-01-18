@@ -21,9 +21,10 @@ foreach my $files(@files){
 	
 	while(<USERINFO>){
 		@email = $_=~ m/.*?(\w+\@\w+\.\w+).*?/i;
-		if(@email){
+		if( @email and @email ne $last ){
 			syswrite(MAIL,"@email[0]\r\n");
 			print "@email[0]\r\n";
+			$last = @email[0];
 			undef @email;
 		}
 	}
