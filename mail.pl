@@ -1,32 +1,38 @@
-#!E:\goss\project\perl\mail
-#Ö÷³ÌÐòÈë¿Ú
+ï»¿#!E:\goss\project\perl\mail
+#ä¸»ç¨‹åºå…¥å£
 
 #syswrite(READERME,"This is my write file contents\n");
 
 use File::Basename;
 
 
-my $source = 'source-mails';
+my $source = 'emails';
 
 my $dest = 'emails';
 
 my @files = glob "$source/*.txt";
 
+open MAIL,">mails/".time().".txt";
+#é‚®ç®±ä¸ªæ•°
+my $count = 0;
+
 foreach my $files(@files){
 	$user_file = open USERINFO,$files;
 	
-	($name,$path,$suffix) = fileparse($files,@suffixlist);
+	#($name,$path,$suffix) = fileparse($files,@suffixlist);
 	
-	open MAIL,">$dest/$name.$suffix";
-	
-	while(<USERINFO>){
-		@email = $_=~ m/.*?(\w+\@\w+\.\w+).*?/i;
-		if( @email and @email ne $last ){
+	while(my $uf = <USERINFO>){
+		my @email = $uf=~m/.*?(\w+\@\w+\.\w+).*?/i;
+		if($count>0 && $count%10000000==0){
+			close MAIL;
+			open MAIL,">mails/".time().".txt";
+		}
+		if(@email){
 			syswrite(MAIL,"@email[0]\r\n");
 			print "@email[0]\r\n";
-			$last = @email[0];
-			undef @email;
+			$count ++;
 		}
+		undef $uf;
 	}
 
 }
